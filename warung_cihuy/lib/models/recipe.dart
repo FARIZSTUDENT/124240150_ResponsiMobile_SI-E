@@ -27,9 +27,16 @@ class Recipe {
       type: type,
       name: (j['name'] ?? '') as String,
       cuisine: (j['cuisine'] ?? 'Unknown') as String,
-      rating: (j['rating'] ?? '') as String,
+      rating: (j['rating'] ?? '').toString(), // API kirim angka (double)
       image: (j['image'] ?? '') as String,
-      instructions: (j['instructions'] ?? '') as String,
+      // API kirim List<String>; data favorit lama tersimpan sebagai String.
+      instructions: j['instructions'] is List
+          ? (j['instructions'] as List)
+              .asMap()
+              .entries
+              .map((e) => '${e.key + 1}. ${e.value}')
+              .join('\n')
+          : (j['instructions'] ?? '').toString(),
     );
   }
 
